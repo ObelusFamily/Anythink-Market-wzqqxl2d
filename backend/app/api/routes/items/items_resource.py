@@ -3,6 +3,7 @@ from typing import Optional
 from fastapi import APIRouter, Body, Depends, HTTPException, Response
 from starlette import status
 import openai
+import os
 openai.api_key = os.getenv('OPENAI_API_KEY')
 from app.api.dependencies.items import (
     check_item_modification_permissions,
