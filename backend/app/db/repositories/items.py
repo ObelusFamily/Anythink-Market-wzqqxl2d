@@ -315,13 +315,20 @@ class ItemsRepository(BaseRepository):  # noqa: WPS214
             raise Exception(f'No item with slug {slug}')
         title = result_rows[0]['title']
 
+        if item_row["image"]:
+            image_url = item_row["image"]
+        else:
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+
+            image_url = f"{current_dir}/placeholder.png"
+
         return Item(
             id_=item_row["id"],
             slug=slug,
             title=title,
             description=item_row["description"],
             body=item_row["body"],
-            image=item_row["image"],
+            image=image_url,
             seller=await self._profiles_repo.get_profile_by_username(
                 username=seller_username,
                 requested_user=requested_user,
