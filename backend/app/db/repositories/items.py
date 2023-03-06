@@ -3,6 +3,8 @@ from typing import List, Optional, Sequence, Union
 from asyncpg import Connection, Record
 from pypika import Query, Order
 
+import os
+
 from app.db.errors import EntityDoesNotExist
 from app.db.queries.queries import queries
 from app.db.queries.tables import (
@@ -315,13 +317,18 @@ class ItemsRepository(BaseRepository):  # noqa: WPS214
             raise Exception(f'No item with slug {slug}')
         title = result_rows[0]['title']
 
+        if item_row["image"]:
+            image_url = item_row["image"]
+        else:
+            image_url = 'placeholder.png'
+                
         return Item(
             id_=item_row["id"],
             slug=slug,
             title=title,
             description=item_row["description"],
             body=item_row["body"],
-            image=item_row["image"],
+            image=image_url,
             seller=await self._profiles_repo.get_profile_by_username(
                 username=seller_username,
                 requested_user=requested_user,
