@@ -3,6 +3,8 @@ from typing import List, Optional, Sequence, Union
 from asyncpg import Connection, Record
 from pypika import Query, Order
 
+import os
+
 from app.db.errors import EntityDoesNotExist
 from app.db.queries.queries import queries
 from app.db.queries.tables import (
@@ -318,10 +320,8 @@ class ItemsRepository(BaseRepository):  # noqa: WPS214
         if item_row["image"]:
             image_url = item_row["image"]
         else:
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-
-            image_url = f"{current_dir}/placeholder.png"
-
+            image_url = 'placeholder.png'
+                
         return Item(
             id_=item_row["id"],
             slug=slug,
